@@ -30,18 +30,17 @@ def query_llm(messages=[]):
     message = response.choices[0].message
     messages.append(message)
     code = message['content']
-    print(response)
-    print(messages)
-    print(code)
     return code, messages, response
     
 
 def format_experiment():
+    rundir = abspath("run")
+    print('formatting experiment for rundir:\n', rundir)
 
     structure_file = abspath("structures/example.extxyz") 
-    dump_file = abspath("dump_file")  # no extension
-    log_file = abspath("log.dat")
-    pot = abspath("data/carbon.xml")
+    dump_file = abspath(os.path.join(rundir, "dump_file"))  # no extension
+    log_file = abspath(os.path.join(rundir, "log.dat"))
+    pot_file = abspath("data/carbon.xml")
     rand_seed = 42  
 
     ncomp = 100000  # (1000*nps) in fs
@@ -57,7 +56,7 @@ read_data {structure_file}
 mass * 12.011   # all atoms are Carbon and therefore have mass ~12
 
 pair_style quip
-pair_coeff * * {pot} "" 6
+pair_coeff * * {pot_file} "" 6
 
 neigh_modify every 1 delay 0 check yes
 timestep 0.001

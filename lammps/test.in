@@ -1,13 +1,13 @@
 
-log /home/jbutch/Projects/Thesis/llms-for-lammps/log.dat append
+log /home/natrolite/vld/univ5120/VLD/Thesis/llms-for-lammps/run/log.dat append
 
 units metal     # mass = g/mole, distance = Å, time = ps, energy = eV, force = eV/Å
 atom_style atomic
-read_data /home/jbutch/Projects/Thesis/llms-for-lammps/structures/example.extxyz
+read_data /home/natrolite/vld/univ5120/VLD/Thesis/llms-for-lammps/structures/example.extxyz
 mass * 12.011   # all atoms are Carbon and therefore have mass ~12
 
 pair_style quip
-pair_coeff * * /home/jbutch/Projects/Thesis/llms-for-lammps/data/carbon.xml "" 6
+pair_coeff * * /home/natrolite/vld/univ5120/VLD/Thesis/llms-for-lammps/data/carbon.xml "" 6
 
 neigh_modify every 1 delay 0 check yes
 timestep 0.001
@@ -33,7 +33,7 @@ thermo_style custom step cpu temp f_TempAve press f_PressAve f_PEAve_Atom vol f_
 thermo_modify flush yes
 thermo 100000
 
-dump traj all atom 100000 /home/jbutch/Projects/Thesis/llms-for-lammps/dump_file.dump.*.dat
+dump traj all atom 100000 /home/natrolite/vld/univ5120/VLD/Thesis/llms-for-lammps/run/dump_file.dump.*.dat
 
 velocity all create 3000 42
 
@@ -56,11 +56,11 @@ run 50000
 unfix integrate
 
 # Phase 4:
-fix integrate all nvt temp 1000 1000 0.1
+fix integrate all nvt temp 1000 300 0.1
 run 50000 
 unfix integrate
 
 # Phase 5:
-fix integrate all nvt temp 1000 300 0.1
+fix integrate all nvt temp 300 300 0.1
 run 50000
 unfix integrate
