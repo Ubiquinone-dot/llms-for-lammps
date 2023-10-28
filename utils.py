@@ -1,6 +1,6 @@
 # Util functions for main.py
 # Base
-import os, sys, glob
+import os, sys, glob, json
 from os.path import abspath
 import subprocess
 import time, datetime
@@ -19,11 +19,11 @@ from dotenv import load_dotenv; load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
-def query_llm(messages=[]):
+def query_llm(QUERY, messages=[]):
 
     response = openai.ChatCompletion.create(
     model="gpt-4",
-    messages=messages,
+    messages=messages+[QUERY],
         temperature=0.1,
         max_tokens=256,
         top_p=1,
@@ -31,10 +31,10 @@ def query_llm(messages=[]):
         presence_penalty=0
     )
 
-    message = response.choices[0].message
-    messages.append(message)
-    code = message['content']
-    return code, messages, response
+    RESPONSE = response.choices[0].message
+    code = RESPONSE['content']
+
+    return RESPONSE, code, response
     
 
 def format_experiment(rundir=None):
