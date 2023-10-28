@@ -1,1 +1,4 @@
+run/*
+lmp
 .env
+structures/Carbon

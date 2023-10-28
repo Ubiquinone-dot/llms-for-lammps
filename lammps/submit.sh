@@ -1,114 +1,65 @@
-#!/bin/bash 
+#!/bin/bash -p
 #$ -cwd
-#$ -pe smp 8
-#$ -l s_rt=100:00:00
-#$ -l h_rss=150G
+#$ -pe smp 128
 #$ -j y
-#$ -o logs/$JOB_ID.log
+#$ -P cpu
+#$ -l s_rt=24:00:00
+#$ -o $JOB_ID.log
 
-# -pe smp = number of cores
-# -l s_rt = soft run-time limit
+# lammps_build="/home/epsilon/vld/univ5120/VLD/amorphous-structure-of-sb2se3/lmp-25Jul2023-PLUMED"
+lammps_build=/u/vld/univ5120/VLD/Thesis/llms-for-lammps/lmp
+input_file=$1
+rundir=$2
+NMPI=8
 
-###################################
-#### create starting structure ####
-###################################
+################################################################
 
-if [ -z "$1" ]; then
-    echo "No density passed."
-    echo "Usage is: qsub submit.sh <density> <anneal_T>"
-    echo "Exiting..."
-    exit 1
-else
-    density=$1
-fi
+DIR=$rundir
+module load aocc/3.2.0
+module load aocl/3.2.0-aocc
+module load mpi/openmpi-x86_64
 
-if [ -z "$2" ]; then
-    echo "No anneal temperature passed."
-    echo "Usage is: qsub submit.sh <density> <anneal_T>"
-    echo "Exiting..."
-    exit 1
-else
-    anneal_T=$2
-fi
-
-struct=$(./generate_structure.py N=200 density=$density t=$anneal_T)
-echo Starting Structure: $struct
-
-###################################
-######## setup directories ########
-###################################
-
-DIR=$(pwd)
-rundir=runs/$struct
-mkdir -p ${rundir}/dumps
-cp $DIR/structures/$struct.data ${rundir}
-
-rsync -aq $rundir/ $TMPDIR/
-cd $TMPDIR
-
-###################################
-########## load modules ###########
-###################################
-
-module load intel/2019
-module load mpich3-intel
-
-# some environment variables for parallelisation and memory usage
-# LAMMPS mainly uses MPI parallelisation (at least with QUIP), so we 
-# 'turn off' the OpenMP parallelisation by setting the number of threads
-# to 1 (also for the intel Math Kernel Library (MKL) that handles matrix
-# operations etc.)
+function Cleanup ()
+{
+    trap "" SIGUSR1 EXIT SIGTERM SIGKILL # Disable trap now in it
+    # Clean up task
+    rsync -rlt $TMPDIR/* $DIR/
+    exit 0
+}
+ulimit -s unlimited
+trap Cleanup SIGUSR1 EXIT SIGTERM SIGKILL
 export OMP_NUM_THREADS=1
 export MKL_NUM_THREADS=1
 export NMPI=$(expr $NSLOTS / $OMP_NUM_THREADS )
-export GFORTRAN_UNBUFFERED_ALL=y
-ulimit -s unlimited
 
-lmp_in=$DIR/lammps/infile
-lmp_exec=$DIR/lammps/lmp_mpi
+# Upload files to TMPDIR
+INFILE='*' # copy infiles to the cluster (command line arguments here, modify as appropriate)
+OUTFILE='*'
+rsync -rlt $DIR/* $TMPDIR --exclude='*.log'
+cd $TMPDIR # Use temporary directories to avoid i/o wastage from cluster to disk
 
-###################################
-############# lammps ##############
-###################################
+################################################################
 
-# timesteps in ps
-melt=5
-quench=5
-warm=50
-anneal=100
-cool=50
 
-# temperatures in K
-melt_T=9000
-quench_T=300
-# anneal_T=$anneal_T
-cool_T=300
+# Run the job
+echo "Job started at $(date)\n\n"
+echo "args: $1 \n $2"
+mpiexec -np $NMPI $lammps_build -in $input_file 
 
-rand_seed=$(od -vAn -N4 -td4 < /dev/urandom | sed "s/-//")
 
-pot=$DIR/lammps/carbon.xml
-
-mpirun -np $NMPI $lmp_exec -in ${lmp_in} \
-   -var quench $quench \
-   -var warm $warm \
-   -var anneal $anneal \
-   -var cool $cool \
-   -var melt $melt \
-\
-   -var melt_T ${melt_T} \
-   -var quench_T ${quench_T} \
-   -var anneal_T ${anneal_T} \
-   -var cool_T ${cool_T} \
-\
-   -var structure $struct \
-   -var rand_seed ${rand_seed} \
-   -var pot $pot \
-   -var model gap &
-
-# copy back job data while we wait for it to finish
-pid=$! 
-while kill -0 $pid 2> /dev/null; do
-    sleep 600  # copy every 600s
-    rsync -aq $TMPDIR/ $DIR/$rundir/
+################################################################
+PID=$!
+while kill -0 $PID 2> /dev/null; do
+    rsync -rltq --exclude '*.sh' --exclude '*.in' --exclude '*.out' --exclude 'ompi*' --exclude 'log.lammps' $TMPDIR/ $DIR/
+    #sleep 600
 done
-wait $pid
+wait $PID
+rsync -rltq --exclude '*.in' --exclude '*.out' --exclude 'ompi*' --exclude 'log.lammps' ./ $DIR
+#sleep 200
+cd $DIR
+pwd
+################################################################
+
+echo "Job finished at $(date)\n\n"
+
+
