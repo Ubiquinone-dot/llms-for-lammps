@@ -16,3 +16,13 @@ You can change the way we get the LLM to infer the parameters of the simulation 
 
 You can give additional parameters to the LLM to infer to make things more impressive; change density, size, number of atoms etc in original structure.
 
+## Setup
+
+```
+pip install openai
+pip install numpy
+pip install quippy-ase
+pip install python-dotenv
+```
+Also make sure you've got an installation of lammps in the immediate file directory (impossible).
+

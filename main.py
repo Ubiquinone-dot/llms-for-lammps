@@ -48,6 +48,7 @@ def main():
         print(RESPONSE)
         print(code)
         sf = '/u/vld/univ5120/VLD/Thesis/llms-for-lammps/lammps/submit.sh'
+        sf = 'lammps/submit.sh'
         schedule(submitfile=sf, infile=infile, rundir=rundir, interval=240)
 
         # analyse results
