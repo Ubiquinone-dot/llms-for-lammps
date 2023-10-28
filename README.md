@@ -1,7 +1,6 @@
 # llms-for-lammps
 Uses llms to design experiments to submit to lammps. Runs repeatedly to get toward some structure.
 
-
 ## More details
 See the messages variable in main to see what context the LLM is provided with to begin with, alternatively see the playground API [here](https://platform.openai.com/playground/p/xL0CfjMc6pTnUbk5WIjEz4mj?model=gpt-4). The basic idea is that we've got some structure which was made by a melt-quench simulation, and we'll ask the LLM to try and infer the experiment (I've forgotten how it was made so). Obviously it's not given much context but we feed back the results to it and so maybe it can manage to infer the best parameters after a few datapoints.
 
