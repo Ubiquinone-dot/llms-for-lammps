@@ -1,5 +1,7 @@
 from utils import *
 
+from dotenv import load_dotenv; load_dotenv()
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 def main():
 
@@ -48,7 +50,7 @@ def main():
         print(RESPONSE)
         print(code)
         sf = '/u/vld/univ5120/VLD/Thesis/llms-for-lammps/lammps/submit.sh'
-        sf = 'lammps/submit.sh'
+        # sf = 'lammps/submit.sh'
         schedule(submitfile=sf, infile=infile, rundir=rundir, interval=240)
 
         # analyse results

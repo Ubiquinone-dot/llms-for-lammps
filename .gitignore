@@ -1,6 +1,6 @@
 run/test_run
 run/run_id*/dump
-
+submit_main.sh
 
 __pycache__/*
 __pycache__

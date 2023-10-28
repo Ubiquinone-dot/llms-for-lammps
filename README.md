@@ -10,7 +10,10 @@ See:
 - `utils.py` for; (i) formatting the details of the experiment (linking together all the necessary components of LAMMPS) (ii) functionality to submit a job to a SGE compute cluster (Sun-grid-engine) and await the result and (ii) analysis
 
 ## Todo's
+- More sophisticated organisation of all the inputs and outputs, its a bit of a mess at the moment 
 - Support OS LLMs
+- Support other compute clusters, not just SGE
+- Improve `lammps/submit.sh` to work on other clusters
 
 Improvements:
 - You can expand the analysis to feed back better information to the LLM
@@ -29,3 +32,4 @@ pip install python-dotenv
 ```
 Also make sure you've got an installation of lammps in the immediate file directory (impossible).
 
+Also change `lammps/submit.sh` as it may not be formatted to request resources properly for your cluster

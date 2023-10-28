@@ -9,6 +9,9 @@ import re
 # Chemistry
 import ase
 from ase.io import read, write
+from dscribe.descriptors import SOAP
+from ase.io import read, write
+from ase import build
 
 # ML / Linalg
 import numpy as np
@@ -101,14 +104,14 @@ velocity all create {T_0} {rand_seed}
 
 run 0
 
-# PHASES:
+# (AI) PHASES: 
 
 """
     return lammps_input
 
 
-def schedule(submitfile, infile, rundir, interval=30):
 
+def schedule(submitfile, infile, rundir, interval=30):
     time.sleep(0.1)
     
     # Submit the job and capture the output
@@ -132,17 +135,20 @@ def schedule(submitfile, infile, rundir, interval=30):
         result = subprocess.run(['qstat', '-j', job_id], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         
         if result.returncode != 0:
-            print(f'{str(datetime.datetime.now())}: Job completed or failed')
+            print(f'{datetime.datetime.now().strftime("%H:%M")}: Job completed or failed')
             break
         
-        print(f'{str(datetime.datetime.now())}: '+f'Job status: {None}')
+        # Parse the job status from the output  # print(f'{datetime.datetime.now().strftime("%H:%M")}: '+f'Job status: {None}')
+        status_match = re.search(r'job_state: (\w+)', result.stdout)
+        if status_match:
+            status_code = status_match.group(1)
+            status_description = job_status_codes.get(status_code, 'unknown status')
+            print(f'{datetime.datetime.now().strftime("%H:%M")}: Job status: {status_description}')
+        else:
+            print(f'{datetime.datetime.now().strftime("%H:%M")}: Failed to parse job status')
+
         time.sleep(interval)
 
-
-
-from dscribe.descriptors import SOAP
-from ase.io import read, write
-from ase import build
 
 def analyse(at, rattle=True):  # written explicity for carbon
 
