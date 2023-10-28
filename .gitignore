@@ -1,4 +1,5 @@
-run/*
+run/test_run
+run/run_id*/dump
 lmp
 .env
 structures/Carbon
