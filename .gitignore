@@ -2,6 +2,7 @@ run/test_run
 run/run_id*/dump
 
 
+__pycache__/*
 __pycache__
 .conda/
 
