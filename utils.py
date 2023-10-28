@@ -138,14 +138,15 @@ def schedule(submitfile, infile, rundir, interval=30):
             print(f'{datetime.datetime.now().strftime("%H:%M")}: Job completed or failed')
             break
         
-        # Parse the job status from the output  # print(f'{datetime.datetime.now().strftime("%H:%M")}: '+f'Job status: {None}')
-        status_match = re.search(r'job_state: (\w+)', result.stdout)
-        if status_match:
-            status_code = status_match.group(1)
-            status_description = job_status_codes.get(status_code, 'unknown status')
-            print(f'{datetime.datetime.now().strftime("%H:%M")}: Job status: {status_description}')
-        else:
-            print(f'{datetime.datetime.now().strftime("%H:%M")}: Failed to parse job status')
+        # TODO: Parse the job status from the output  
+        print(f'{datetime.datetime.now().strftime("%H:%M")}: '+f'Job status: {None}')
+        # status_match = re.search(r'job_state: (\w+)', result.stdout)
+        # if status_match:
+        #     status_code = status_match.group(1)
+        #     status_description = job_status_codes.get(status_code, 'unknown status')
+        #     print(f'{datetime.datetime.now().strftime("%H:%M")}: Job status: {status_description}')
+        # else:
+        #     print(f'{datetime.datetime.now().strftime("%H:%M")}: Failed to parse job status')
 
         time.sleep(interval)
 
