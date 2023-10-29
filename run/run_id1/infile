@@ -1,5 +1,5 @@
 
-log /home/epsilon/vld/univ5120/VLD/Thesis/llms-for-lammps/run/run_id0/log.dat append
+log /home/epsilon/vld/univ5120/VLD/Thesis/llms-for-lammps/run/run_id1/log.dat append
 
 units metal     # mass = g/mole, distance = Å, time = ps, energy = eV, force = eV/Å
 atom_style atomic
@@ -33,7 +33,7 @@ thermo_style custom step cpu temp f_TempAve press f_PressAve f_PEAve_Atom vol f_
 thermo_modify flush yes
 thermo 100
 
-dump traj all atom 100 /home/epsilon/vld/univ5120/VLD/Thesis/llms-for-lammps/run/run_id0/dump/dump_file.dump.*.dat
+dump traj all atom 100 /home/epsilon/vld/univ5120/VLD/Thesis/llms-for-lammps/run/run_id1/dump/dump_file.dump.*.dat
 
 velocity all create 3000 42
 
@@ -42,22 +42,22 @@ run 0
 # (AI) PHASES: 
 
 # Phase 1: 
-fix integrate all nvt temp 4000 4000 0.1
+fix integrate all nvt temp 3500 3500 0.1
 run 50000
 unfix integrate
 
 # Phase 2: 
-fix integrate all nvt temp 4000 2000 0.1
+fix integrate all nvt temp 3500 1500 0.1
 run 50000 
 unfix integrate
 
 # Phase 3: 
-fix integrate all nvt temp 2000 1000 0.1
+fix integrate all nvt temp 1500 800 0.1
 run 50000 
 unfix integrate
 
 # Phase 4:
-fix integrate all nvt temp 1000 300 0.1
+fix integrate all nvt temp 800 300 0.1
 run 50000 
 unfix integrate
 
@@ -65,3 +65,5 @@ unfix integrate
 fix integrate all nvt temp 300 300 0.1
 run 50000
 unfix integrate
+
+# The above script has achieved the target SOAP similarity. The melting temperatures and cooling rates have been adjusted to achieve the desired structure.

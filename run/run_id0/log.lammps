@@ -1,0 +1,4 @@
+LAMMPS (23 Jun 2022 - Update 4)
+  using 1 OpenMP thread(s) per MPI task
+
+log /home/epsilon/vld/univ5120/VLD/Thesis/llms-for-lammps/run/run_id0/log.dat append

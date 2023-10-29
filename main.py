@@ -12,7 +12,7 @@ def main():
         },
         {
         "role": "user",
-        "content": "EXPERIMENT OUTCOMES:\nSOAP Similarity to graphite is 0.1768 \nSOAP Similarity to diamond is 0.9408 \nSOAP Similarity to TARGET is 0.9901\n\nSCRIPT:"
+        "content": "EXPERIMENT OUTCOME:\nSOAP Similarity to graphite is 0.1768 \nSOAP Similarity to diamond is 0.9408 \nSOAP Similarity to TARGET is 0.9901\n\nSCRIPT:"
         },
         {
         "role": "assistant",
@@ -21,10 +21,10 @@ def main():
     ]
     QUERY = {
         "role": "user",
-        "content": "EXPERIMENT OUTCOMES:\nSOAP similarity to graphite is 0.0137\nSOAP similarity to diamond is 0.9820\nSOAP Similarity to TARGET is 1.000\n\nSCRIPT:"
+        "content": "EXPERIMENT OUTCOME:\nSOAP similarity to graphite is 0.0137\nSOAP similarity to diamond is 0.9820\nSOAP Similarity to TARGET is 1.000\n\nSCRIPT:"
     }
 
-    for i in range(15):
+    for i in range(20):
         # format beginning of experiment script
         rundir=abspath(f"run/run_id{i}")
         if not os.path.isdir(rundir): os.makedirs(rundir)

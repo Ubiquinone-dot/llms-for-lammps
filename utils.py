@@ -209,6 +209,6 @@ def analyse(at, rattle=True):  # written explicity for carbon
     sims = { k: round(v, 4) for k,v in sims.items() }
 
     sims_str = '\n'.join([ f'SOAP Similarity to {k} is {v} ' for k,v in sims.items() ])  # SOAP similarity to diamond is {similarity_to_diamond}\nSOAP similarity to graphite is {similarity_to_graphite}
-    sims_str = 'RESULT:\n' + sims_str + '\nSCRIPT:'
+    sims_str = 'EXPERIMENT OUTCOME:\n' + sims_str + '\nSCRIPT:'
     
     return sims, sims_str

@@ -1,47 +1,13 @@
-
-units metal     # mass = g/mole, distance = Å, time = ps, energy = eV, force = eV/Å
-atom_style atomic
-read_data /home/epsilon/vld/univ5120/VLD/Thesis/llms-for-lammps/structures/example.data
+Job started at Sat 28 Oct 15:55:16 BST 2023\n\n
+args: /home/epsilon/vld/univ5120/VLD/Thesis/llms-for-lammps/run/run_id0/infile \n /home/epsilon/vld/univ5120/VLD/Thesis/llms-for-lammps/run/run_id0
+LAMMPS (23 Jun 2022 - Update 4)
+  using 1 OpenMP thread(s) per MPI task
 Reading data file ...
   orthogonal box = (0 0 0) to (15.854536 15.854536 15.854536)
   4 by 4 by 8 MPI processor grid
   reading atoms ...
   200 atoms
   read_data CPU = 0.115 seconds
-mass * 12.011   # all atoms are Carbon and therefore have mass ~12
-
-pair_style quip
-pair_coeff * * /home/epsilon/vld/univ5120/VLD/Thesis/llms-for-lammps/data/carbon.xml "" 6
-
-neigh_modify every 1 delay 0 check yes
-timestep 0.001
-
-variable nAtoms equal atoms
-
-fix removeMomentum all momentum 1 linear 1 1 1
-
-compute T all temp
-variable P equal press
-variable v equal vol
-variable PE_Atom equal c_PE/v_nAtoms
-
-fix TempAve all ave/time 100 1 100 c_T
-fix PressAve all ave/time 100 1 100 v_P
-fix vAve all ave/time 100 1 100 v_v
-fix PEAve_Atom all ave/time 100 1 100 v_PE_Atom
-
-compute PE all pe pair
-compute MSD all msd
-
-thermo_style custom step cpu temp f_TempAve press f_PressAve f_PEAve_Atom vol f_vAve c_MSD[4]
-thermo_modify flush yes
-thermo 100
-
-dump traj all atom 100 /home/epsilon/vld/univ5120/VLD/Thesis/llms-for-lammps/run/run_id0/dump/dump_file.dump.*.dat
-
-velocity all create 3000 42
-
-run 0
 WARNING: No fixes with time integration, atoms won't move (src/verlet.cpp:60)
 Neighbor list info ...
   update every 1 steps, delay 0 steps, check yes
@@ -56,6 +22,10 @@ Neighbor list info ...
       stencil: full/bin/3d
       bin: standard
 WARNING: Proc sub-domain size < neighbor skin, could lead to lost atoms (src/domain.cpp:970)
+Setting up Verlet run ...
+  Unit style    : metal
+  Current step  : 0
+  Time step     : 0.001
 Per MPI rank memory allocation (min/avg/max) = 3.341 | 3.873 | 4.341 Mbytes
    Step          CPU            Temp        f_TempAve        Press        f_PressAve    f_PEAve_Atom      Volume         f_vAve        c_MSD[4]   
          0   0              3000           3000           4801.15        4801.15       -157.8272       3985.296       3985.296       0            
@@ -86,13 +56,11 @@ Total # of neighbors = 9792
 Ave neighs/atom = 48.96
 Neighbor list builds = 0
 Dangerous builds = 0
-
-# (AI) PHASES:
-
-# Phase 1:
-fix integrate all nvt temp 4000 4000 0.1
-run 50000
 WARNING: Proc sub-domain size < neighbor skin, could lead to lost atoms (src/domain.cpp:970)
+Setting up Verlet run ...
+  Unit style    : metal
+  Current step  : 0
+  Time step     : 0.001
 Per MPI rank memory allocation (min/avg/max) = 3.341 | 3.873 | 4.341 Mbytes
    Step          CPU            Temp        f_TempAve        Press        f_PressAve    f_PEAve_Atom      Volume         f_vAve        c_MSD[4]   
          0   0              3000           3000           4801.15        4801.15       -157.8272       3985.296       3985.296       0            
@@ -624,12 +592,11 @@ Total # of neighbors = 10084
 Ave neighs/atom = 50.42
 Neighbor list builds = 2228
 Dangerous builds = 0
-unfix integrate
-
-# Phase 2:
-fix integrate all nvt temp 4000 2000 0.1
-run 50000
 WARNING: Proc sub-domain size < neighbor skin, could lead to lost atoms (src/domain.cpp:970)
+Setting up Verlet run ...
+  Unit style    : metal
+  Current step  : 50000
+  Time step     : 0.001
 Per MPI rank memory allocation (min/avg/max) = 4.341 | 4.341 | 4.342 Mbytes
    Step          CPU            Temp        f_TempAve        Press        f_PressAve    f_PEAve_Atom      Volume         f_vAve        c_MSD[4]   
      50000   0              3944.7317      3944.7317     -4893.9767     -4893.9767     -157.24816      3985.296       3985.296       307.00907    
@@ -1161,12 +1128,11 @@ Total # of neighbors = 10586
 Ave neighs/atom = 52.93
 Neighbor list builds = 1622
 Dangerous builds = 0
-unfix integrate
-
-# Phase 3:
-fix integrate all nvt temp 2000 1000 0.1
-run 50000
 WARNING: Proc sub-domain size < neighbor skin, could lead to lost atoms (src/domain.cpp:970)
+Setting up Verlet run ...
+  Unit style    : metal
+  Current step  : 100000
+  Time step     : 0.001
 Per MPI rank memory allocation (min/avg/max) = 4.341 | 4.341 | 4.342 Mbytes
    Step          CPU            Temp        f_TempAve        Press        f_PressAve    f_PEAve_Atom      Volume         f_vAve        c_MSD[4]   
     100000   0              1991.9387      1991.9387     -3497.7861     -3497.7861     -157.70072      3985.296       3985.296       920.88809    
@@ -1698,12 +1664,11 @@ Total # of neighbors = 10578
 Ave neighs/atom = 52.89
 Neighbor list builds = 884
 Dangerous builds = 0
-unfix integrate
-
-# Phase 4:
-fix integrate all nvt temp 1000 300 0.1
-run 50000
 WARNING: Proc sub-domain size < neighbor skin, could lead to lost atoms (src/domain.cpp:970)
+Setting up Verlet run ...
+  Unit style    : metal
+  Current step  : 150000
+  Time step     : 0.001
 Per MPI rank memory allocation (min/avg/max) = 4.341 | 4.341 | 4.342 Mbytes
    Step          CPU            Temp        f_TempAve        Press        f_PressAve    f_PEAve_Atom      Volume         f_vAve        c_MSD[4]   
     150000   0              966.51833      966.51833     -9408.8401     -9408.8401     -157.86165      3985.296       3985.296       1945.5861    
@@ -2235,12 +2200,11 @@ Total # of neighbors = 10636
 Ave neighs/atom = 53.18
 Neighbor list builds = 488
 Dangerous builds = 0
-unfix integrate
-
-# Phase 5:
-fix integrate all nvt temp 300 300 0.1
-run 50000
 WARNING: Proc sub-domain size < neighbor skin, could lead to lost atoms (src/domain.cpp:970)
+Setting up Verlet run ...
+  Unit style    : metal
+  Current step  : 200000
+  Time step     : 0.001
 Per MPI rank memory allocation (min/avg/max) = 4.341 | 4.341 | 4.342 Mbytes
    Step          CPU            Temp        f_TempAve        Press        f_PressAve    f_PEAve_Atom      Volume         f_vAve        c_MSD[4]   
     200000   0              301.21889      301.21889     -8627.8236     -8627.8236     -157.96305      3985.296       3985.296       1396.861     
@@ -2772,5 +2736,7 @@ Total # of neighbors = 10614
 Ave neighs/atom = 53.07
 Neighbor list builds = 353
 Dangerous builds = 0
-unfix integrate
 Total wall time: 3:17:38
+/home/epsilon/vld/univ5120/VLD/Thesis/llms-for-lammps/run/run_id0
+Job finished at Sat 28 Oct 19:12:57 BST 2023\n\n
+TERM environment variable not set.
